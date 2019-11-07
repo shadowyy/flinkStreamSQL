@@ -328,12 +328,12 @@ public class SideSqlExecTest {
                 "    name varchar,\n" +
                 "    channel varchar\n" +
                 " )WITH(\n" +
-                "    type ='kafka10',\n" +
+                "    type ='kafka11',\n" +
                 "    bootstrapServers ='127.0.0.1:9092',\n" +
                 "    zookeeperQuorum ='127.0.0.1:2181/kafka',\n" +
-                "    offsetReset ='earliest',\n" +
-                "    topic ='d',\n" +
-                "    parallelism ='3'\n" +
+                "    offsetReset ='latest',\n" +
+                "    topic ='test_flink',\n" +
+                "    parallelism ='1'\n" +
                 " );\n" +
                 " \n" +
                 " CREATE TABLE MyResult(\n" +
@@ -344,8 +344,8 @@ public class SideSqlExecTest {
                 "    url ='jdbc:mysql://127.0.0.1:3306/test?charset=utf8&useSSL=false',\n" +
                 "    userName ='root',\n" +
                 "    password ='root',\n" +
-                "    tableName ='pv',\n" +
-                "    parallelism ='3'\n" +
+                "    tableName ='test_flink',\n" +
+                "    parallelism ='1'\n" +
                 " );\n" +
                 " \n" +
                 "insert into MyResult\n" +
