@@ -329,10 +329,10 @@ public class SideSqlExecTest {
                 "    channel varchar\n" +
                 " )WITH(\n" +
                 "    type ='kafka10',\n" +
-                "    bootstrapServers ='172.21.32.1:9092',\n" +
-                "    zookeeperQuorum ='172.21.32.1:2181/kafka',\n" +
+                "    bootstrapServers ='127.0.0.1:9092',\n" +
+                "    zookeeperQuorum ='127.0.0.1:2181/kafka',\n" +
                 "    offsetReset ='earliest',\n" +
-                "    topic ='test1',\n" +
+                "    topic ='d',\n" +
                 "    parallelism ='3'\n" +
                 " );\n" +
                 " \n" +
@@ -343,7 +343,7 @@ public class SideSqlExecTest {
                 "    type ='mysql',\n" +
                 "    url ='jdbc:mysql://127.0.0.1:3306/test?charset=utf8&useSSL=false',\n" +
                 "    userName ='root',\n" +
-                "    password ='123456',\n" +
+                "    password ='root',\n" +
                 "    tableName ='pv',\n" +
                 "    parallelism ='3'\n" +
                 " );\n" +
@@ -360,8 +360,8 @@ public class SideSqlExecTest {
                 "    channel varchar\n" +
                 " )WITH(\n" +
                 "    type ='kafka10',\n" +
-                "    bootstrapServers ='172.21.32.1:9092',\n" +
-                "    zookeeperQuorum ='172.21.32.1:2181/kafka',\n" +
+                "    bootstrapServers ='127.0.0.1:9092',\n" +
+                "    zookeeperQuorum ='127.0.0.1:2181/kafka',\n" +
                 "    offsetReset ='earliest',\n" +
                 "    topic ='test',\n" +
                 "    parallelism ='3'\n" +
@@ -373,7 +373,7 @@ public class SideSqlExecTest {
                 "\txccount int\n" +
                 " )WITH(\n" +
                 "    type ='mongo',\n" +
-                "    address ='172.21.32.1:27017,172.21.32.1:27017',\n" +
+                "    address ='127.0.0.1:27017,127.0.0.1:27017',\n" +
                 "    database ='test',\n" +
                 "    tableName ='pv',\n" +
                 "    parallelism ='3'\n" +
@@ -412,8 +412,8 @@ public class SideSqlExecTest {
                 "    channel varchar\n" +
                 " )WITH(\n" +
                 "    type ='kafka10',\n" +
-                "    bootstrapServers ='172.21.32.1:9092',\n" +
-                "    zookeeperQuorum ='172.21.32.1:2181/kafka',\n" +
+                "    bootstrapServers ='127.0.0.1:9092',\n" +
+                "    zookeeperQuorum ='127.0.0.1:2181/kafka',\n" +
                 "    offsetReset ='earliest',\n" +
                 "    topic ='test1',\n" +
                 "    parallelism ='3'\n" +
@@ -425,7 +425,7 @@ public class SideSqlExecTest {
                 "\txccount int\n" +
                 " )WITH(\n" +
                 "    type ='mongo',\n" +
-                "    address ='172.21.32.1:27017,172.21.32.1:27017',\n" +
+                "    address ='127.0.0.1:27017,127.0.0.1:27017',\n" +
                 "    database ='test',\n" +
                 "    tableName ='pv',\n" +
                 "    parallelism ='3'\n" +
@@ -438,7 +438,7 @@ public class SideSqlExecTest {
                 "    PERIOD FOR SYSTEM_TIME\n" +
                 " )WITH(\n" +
                 "    type ='mongo',\n" +
-                "    address ='172.21.32.1:27017,172.21.32.1:27017',\n" +
+                "    address ='127.0.0.1:27017,127.0.0.1:27017',\n" +
                 "    database ='test',\n" +
                 "    tableName ='sidetest',\n" +
                 "    cache ='ALL',\n" +
@@ -461,13 +461,16 @@ public class SideSqlExecTest {
         paramList.add("-name");
         paramList.add("xc");
         paramList.add("-localSqlPluginPath");
-        paramList.add("D:\\soucecode\\flinkStreamSQL-my-src\\plugins");
+        paramList.add("C:\\Users\\Administrator\\data\\code\\java\\github\\flinkStreamSQL\\plugins");
         paramList.add("-mode");
         paramList.add("local");
         paramList.add("-confProp");
         String conf = "{\"time.characteristic\":\"ProcessingTime\",\"sql.checkpoint.interval\":10000}";
         String confEncode = URLEncoder.encode(conf, Charsets.UTF_8.name());
         paramList.add(confEncode);
+        paramList.add("-remoteSqlPluginPath");
+        //paramList.add("/opt/dtstack/flinkplugin");
+        paramList.add("C:\\Users\\Administrator\\data\\code\\java\\github\\flinkStreamSQL\\plugins");
 
         String[] params = new String[paramList.size()];
         paramList.toArray(params);
