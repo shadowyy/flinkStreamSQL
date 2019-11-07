@@ -5,20 +5,20 @@ CREATE TABLE MyTable(
     CHARACTER_LENGTH(channel) as timeLeng,
     WATERMARK FOR xctime AS withOffset(xctime,1000)
  )WITH(
-    type='kafka09',
-    bootstrapServers='172.16.8.198:9092',
+    type='kafka11',
+    bootstrapServers='127.0.0.1:9092',
     offsetReset='latest',
-    topic='nbTest1'
+    topic='test_flink'
  );
 CREATE TABLE MyResult(
     channel STRING,
     pv INT
  )WITH(
     type='mysql',
-    url='jdbc:mysql://172.16.8.104:3306/test?charset=utf8',
-    userName='dtstack',
-    password='abc123',
-    tableName='pv'
+    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',
+    userName='root',
+    password='root',
+    tableName='pv_res'
  );
 
 create table sideTable(
@@ -28,9 +28,9 @@ create table sideTable(
     PERIOD FOR SYSTEM_TIME
  )WITH(
     type='mysql',
-    url='jdbc:mysql://172.16.8.104:3306/test?charset=utf8',
-    userName='dtstack',
-    password='abc123',
+    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',
+    userName='root',
+    password='root',
     tableName='sidetest',
     cache = 'LRU',
     cacheTTLMs='10000'

@@ -354,6 +354,63 @@ public class SideSqlExecTest {
     }
 
     @Test
+    public void testSideSql() throws Exception {
+        String sql = "CREATE TABLE MyTable(\n" +
+                "    channel varchar,\n" +
+                "    pv INT,\n" +
+                "    xctime bigint,\n" +
+                "    CHARACTER_LENGTH(channel) as timeLeng\n" +
+                //"    WATERMARK FOR xctime AS withOffset(xctime,1000)\n" +
+                " )WITH(\n" +
+                "    type='kafka11',\n" +
+                "    bootstrapServers='127.0.0.1:9092',\n" +
+                "    offsetReset='latest',\n" +
+                "    topic='test_flink'\n" +
+                " );\n" +
+                "CREATE TABLE MyResult(\n" +
+                "    channel varchar,\n" +
+                "    pv INT\n" +
+                " )WITH(\n" +
+                "    type='mysql',\n" +
+                "    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',\n" +
+                "    userName='root',\n" +
+                "    password='root',\n" +
+                "    tableName='pv_res'\n" +
+                " );\n" +
+                "\n" +
+                "create table sideTable(\n" +
+                "    channel varchar,\n" +
+                "    xccount int,\n" +
+                "    PRIMARY KEY(channel),\n" +
+                "    PERIOD FOR SYSTEM_TIME\n" +
+                " )WITH(\n" +
+                "    type='mysql',\n" +
+                "    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',\n" +
+                "    userName='root',\n" +
+                "    password='root',\n" +
+                "    tableName='sidetest',\n" +
+                "    cache = 'LRU',\n" +
+                "    cacheTTLMs='10000'\n" +
+                " );\n" +
+                "\n" +
+                "insert\n" +
+                "into\n" +
+                "    MyResult\n" +
+                "    select\n" +
+                "        a.channel,\n" +
+                "        b.xccount\n" +
+                "    from\n" +
+                "        MyTable a\n" +
+                "    join\n" +
+                "        sideTable b\n" +
+                "            on a.channel=b.channel\n" +
+                "    where\n" +
+                "        b.channel = 'xc'\n" +
+                "        and a.pv=10; ";
+        test2(sql);
+    }
+
+    @Test
     public void testParseMongo() throws Exception {
         String sql = "CREATE TABLE MyTable(\n" +
                 "    name varchar,\n" +
