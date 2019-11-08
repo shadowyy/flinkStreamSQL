@@ -1,0 +1,40 @@
+create table MyTable(
+    id int,
+    age int
+ )WITH(
+    type='kafka11',
+    bootstrapServers='127.0.0.1:9092',
+    offsetReset='latest',
+    topic='test_flink'
+ );
+create table MyResult(
+    name varchar,
+    age int
+ )WITH(
+    type='mysql',
+    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',
+    userName='root',
+    password='root',
+    tableName='person_result'
+ );
+create table sideTable(
+    id int,
+    name varchar,
+    PRIMARY KEY(id),
+    PERIOD FOR SYSTEM_TIME
+ )WITH(
+    type='mysql',
+    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',
+    userName='root',
+    password='root',
+    tableName='table_name',
+    cache = 'LRU',
+    cacheTTLMs='10000'
+ );
+
+insert
+into
+MyResult
+select b.name,a.age
+from MyTable a join sideTable b
+on a.id = b.id

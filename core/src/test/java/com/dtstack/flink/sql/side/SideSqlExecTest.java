@@ -354,6 +354,51 @@ public class SideSqlExecTest {
     }
 
     @Test
+    public void testMysqlSideSql() throws Exception {
+        String sql = "create table MyTable(\n" +
+                "    id int,\n" +
+                "    age int\n" +
+                " )WITH(\n" +
+                "    type='kafka11',\n" +
+                "    bootstrapServers='127.0.0.1:9092',\n" +
+                "    offsetReset='latest',\n" +
+                "    topic='test_flink'\n" +
+                " );\n" +
+                "create table MyResult(\n" +
+                "    name varchar,\n" +
+                "    age int\n" +
+                " )WITH(\n" +
+                "    type='mysql',\n" +
+                "    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',\n" +
+                "    userName='root',\n" +
+                "    password='root',\n" +
+                "    tableName='person_result'\n" +
+                " );\n" +
+                "create table sideTable(\n" +
+                "    id int,\n" +
+                "    name varchar,\n" +
+                "    PRIMARY KEY(id),\n" +
+                "    PERIOD FOR SYSTEM_TIME\n" +
+                " )WITH(\n" +
+                "    type='mysql',\n" +
+                "    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',\n" +
+                "    userName='root',\n" +
+                "    password='root',\n" +
+                "    tableName='table_name',\n" +
+                "    cache = 'LRU',\n" +
+                "    cacheTTLMs='10000'\n" +
+                " );\n" +
+                "\n" +
+                "insert\n" +
+                "into\n" +
+                "MyResult\n" +
+                "select b.name,a.age\n" +
+                "from MyTable a join sideTable b\n" +
+                "on a.id = b.id";
+        test2(sql);
+    }
+
+    @Test
     public void testSideSql() throws Exception {
         String sql = "CREATE TABLE MyTable(\n" +
                 "    channel varchar,\n" +
@@ -375,7 +420,7 @@ public class SideSqlExecTest {
                 "    url='jdbc:mysql://127.0.0.1:3306/test?charset=utf8',\n" +
                 "    userName='root',\n" +
                 "    password='root',\n" +
-                "    tableName='pv_res'\n" +
+                "    tableName='pv_result'\n" +
                 " );\n" +
                 "\n" +
                 "create table sideTable(\n" +
@@ -398,7 +443,7 @@ public class SideSqlExecTest {
                 "    MyResult\n" +
                 "    select\n" +
                 "        a.channel,\n" +
-                "        b.xccount\n" +
+                "        b.xccount as pv\n" +
                 "    from\n" +
                 "        MyTable a\n" +
                 "    join\n" +
